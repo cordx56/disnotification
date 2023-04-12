@@ -6,8 +6,12 @@ authors = ["CHISEN Kaoru <cordx56@cordx.net>"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[[bin]]
+name = "disnot"
+path = "src/main.rs"
+
 [dependencies]
 dotenv = "0.15"
 tokio = { version = "1", features = ["full"] }
-serenity = "0.11"
+serenity = { version = "0.11", default-features = false, features = ["builder", "cache", "client", "gateway", "http", "model", "utils", "rustls_backend"] }
 sqlx = { version = "0.6", features = ["runtime-tokio-rustls", "postgres"] }

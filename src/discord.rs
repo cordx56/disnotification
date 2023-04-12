@@ -23,7 +23,7 @@ impl EventHandler for DisNotHandler {
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
         if let Interaction::ApplicationCommand(command) = interaction {
             match command.data.name.as_str() {
-                "disnot" => cmd::run(&self.db_pool, &ctx, &command).await,
+                "disnotconfig" => cmd::run_config(&self.db_pool, &ctx, &command).await,
                 _ => {
                     command
                         .create_interaction_response(&ctx.http, |response| {
@@ -48,7 +48,7 @@ impl EventHandler for DisNotHandler {
         println!("Connected as {}", ready.user.name);
 
         Command::set_global_application_commands(&ctx.http, |commands| {
-            commands.create_application_command(|command| cmd::register(command))
+            commands.create_application_command(|command| cmd::register_config(command))
         })
         .await
         .expect("Slash command settings failed!");
