@@ -1,6 +1,6 @@
 services:
   bot:
-    image: ghcr.io/cordx56/disnotification
+    build: .
     env_file:
       - .env
     restart: always
