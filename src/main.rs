@@ -9,7 +9,7 @@ async fn main() {
     let token = env::var("DISCORD_TOKEN").expect("DISCORD_TOKEN is not set");
 
     let db_pool = db::connect().await.expect("DB connect error");
-    let mut client = Client::builder(token, GatewayIntents::GUILD_VOICE_STATES)
+    let mut client = Client::builder(token, GatewayIntents::non_privileged())
         .event_handler(discord::DisNotHandler { db_pool: db_pool })
         .await
         .expect("Client creating error");
