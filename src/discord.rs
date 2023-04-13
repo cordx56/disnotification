@@ -23,7 +23,22 @@ impl EventHandler for DisNotHandler {
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
         if let Interaction::ApplicationCommand(command) = interaction {
             match command.data.name.as_str() {
-                "disnotconfig" => cmd::run_config(&self.db_pool, &ctx, &command).await,
+                "disnotconfig" => {
+                    let config_result = cmd::run_config(&self.db_pool, &ctx, &command).await;
+                    match config_result {
+                        Err(cmd::ConfigError::DbError(message)) => {
+                            cmd::create_command_response(&ctx, &command, &message)
+                                .await
+                                .ok();
+                        }
+                        Err(cmd::ConfigError::InvalidCommand(message)) => {
+                            cmd::create_command_response(&ctx, &command, &message)
+                                .await
+                                .ok();
+                        }
+                        _ => {}
+                    }
+                }
                 _ => {
                     command
                         .create_interaction_response(&ctx.http, |response| {
